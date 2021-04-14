@@ -32,9 +32,9 @@ market_df['Price ETH'] = market_df['Price ETH'].str.replace(r"[\"\',]",'')
 market_df.to_csv('Market_Data.csv',  index = None)
 
 # Loading into Postgres
-engine = create_engine('postgresql://postgres:ENTERPASSWORD@localhost:5432/CryptoPunks')
+engine = create_engine('postgresql://postgres:jerren@localhost:5432/CryptoPunks')
 #ENTERPASSWORD
 conn = engine.connect()
 
-market_df.to_sql('market_df', engine)
-punks_df.to_sql('punks_df', engine)
+market_df.to_sql('market_df', engine, index = False)
+punks_df.to_sql('punks_df', engine, index = False)
