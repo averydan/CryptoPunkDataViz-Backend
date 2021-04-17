@@ -7,7 +7,7 @@ from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
-conn = psycopg2.connect("dbname=CryptoPunks user=postgres password=B9i18O69")
+conn = psycopg2.connect("dbname=CryptoPunks user=postgres password=ENTERPASSWORD")
 cursor = conn.cursor()
 select_all_market = "select * from market_df"
 cursor.execute(select_all_market)
