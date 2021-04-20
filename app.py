@@ -7,7 +7,7 @@ from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
-conn = psycopg2.connect("dbname=CryptoPunks user=postgres password=ENTERPASSWORD")
+conn = psycopg2.connect("dbname=CryptoPunks user=postgres password=Lizst_52")
 cursor = conn.cursor()
 select_all_market = "select * from market_df"
 cursor.execute(select_all_market)
@@ -17,12 +17,9 @@ cursor.execute(select_all_punks)
 punk_data = cursor.fetchall()
 
 
-
-
-
 @app.route('/')
 def hello():
-    return f"Use slash market to get up to date market data, and slash punks for punk listing."
+    return f"Use /punk/<inpId> to individual punk information, /market to access all market data, /p"
 
 
 @app.route('/punk/<inpId>')
@@ -35,12 +32,13 @@ def punk(inpId):
     select_punk_where_id = f"select * from punks_df where id = {inpId}"
     cursor.execute(select_punk_where_id)
     punk_data = cursor.fetchall()
-    punk_result = {
+    punk_dict = {
     "ID": punk_data[0][0],
     "Type": punk_data[0][1],
     "Count": punk_data[0][2],
     "Accessories": punk_data[0][3]
     }
+    punk_result = [punk_dict]
     for row in market_data:
         market_dict = {}
         market_dict["ID"] = row[2]
@@ -59,29 +57,7 @@ def punk(inpId):
 
     return jsonify(final_result)
 
-
-
-
-
-
-
-@app.route('/market')
-def market():
-    market_results = []
-    for row in market_data:
-        market_dict = {}
-        market_dict["ID"] = row[2]
-        market_dict["Date"] = row[0]
-        market_dict["Time"] = row[1]
-        market_dict["Price"] = row[3]
-        market_results.append(market_dict)
-
-    return jsonify(market_results)
-
-
-
-
-
+# Alternative routes
 
 @app.route('/markettopten')
 def markettopten():
@@ -104,8 +80,18 @@ def markettopten():
     return jsonify(market_results)
 
 
+@app.route('/market')
+def market():
+    market_results = []
+    for row in market_data:
+        market_dict = {}
+        market_dict["ID"] = row[2]
+        market_dict["Date"] = row[0]
+        market_dict["Time"] = row[1]
+        market_dict["Price"] = row[3]
+        market_results.append(market_dict)
 
-
+    return jsonify(market_results)
 
 
 @app.route('/punks')
